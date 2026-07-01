@@ -384,6 +384,15 @@ function initiatePaystackPayment() {
         return;
     }
 
+    // ─── MOBILE FIX ────────────────────────────────────────────────────────
+    // iOS Safari and Android Chrome clip or hide position:fixed iframes when
+    // the parent page has overflow:hidden or a fixed modal covering the screen.
+    // Solution: hide our modal BEFORE opening Paystack, restore on cancel.
+    const payModal = document.getElementById('paymentModal');
+    if (payModal) payModal.style.visibility = 'hidden';
+    document.body.style.overflow = ''; // unlock body scroll for Paystack iframe
+    // ───────────────────────────────────────────────────────────────────────
+
     // Shared config for both API versions
     const paystackConfig = {
         key:      PAYSTACK_PUBLIC_KEY,
@@ -398,11 +407,17 @@ function initiatePaystackPayment() {
             saveBalance(newBalance);
             renderBalance();
             addNotification(`₦${amount.toLocaleString('en-NG')} successfully added to your Naira wallet.`, 'payment');
+            // Restore and update modal to show success, then close
+            if (payModal) payModal.style.visibility = 'visible';
+            document.body.style.overflow = 'hidden';
             showPayStatus(`✅ Payment successful! ₦${amount.toLocaleString('en-NG')} added to your wallet.`, 'success');
             btn.innerHTML = '<i class="fa-solid fa-check"></i> Payment Confirmed!';
             setTimeout(() => closePaymentModal(), 2500);
         },
         onCancel: function() {
+            // Restore our modal so the user can try again
+            if (payModal) payModal.style.visibility = 'visible';
+            document.body.style.overflow = 'hidden';
             btn.disabled = false;
             btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay Securely with Paystack';
             showPayStatus('Payment window closed. Try again when ready.', 'warn');
@@ -414,11 +429,15 @@ function initiatePaystackPayment() {
             saveBalance(newBalance);
             renderBalance();
             addNotification(`₦${amount.toLocaleString('en-NG')} successfully added to your Naira wallet.`, 'payment');
+            if (payModal) payModal.style.visibility = 'visible';
+            document.body.style.overflow = 'hidden';
             showPayStatus(`✅ Payment successful! ₦${amount.toLocaleString('en-NG')} added to your wallet.`, 'success');
             btn.innerHTML = '<i class="fa-solid fa-check"></i> Payment Confirmed!';
             setTimeout(() => closePaymentModal(), 2500);
         },
         onClose: function() {
+            if (payModal) payModal.style.visibility = 'visible';
+            document.body.style.overflow = 'hidden';
             btn.disabled = false;
             btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay Securely with Paystack';
             showPayStatus('Payment window closed. Try again when ready.', 'warn');
@@ -435,6 +454,9 @@ function initiatePaystackPayment() {
             handler.openIframe();
         }
     } catch (err) {
+        // Restore modal if Paystack fails to open
+        if (payModal) payModal.style.visibility = 'visible';
+        document.body.style.overflow = 'hidden';
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay Securely with Paystack';
         showPayStatus('⚠️ Could not open payment window. Please try again.', 'error');
