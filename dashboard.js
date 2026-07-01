@@ -4,10 +4,22 @@ if (!localStorage.getItem('currentUser')) {
     window.location.replace('signin.html');
 }
 
+// Apply dark mode globally on every page load
+(function applyDarkModeEarly() {
+    if (localStorage.getItem('darkMode') === 'on') {
+        document.documentElement.classList.add('dark');
+        document.body && document.body.classList.add('dark');
+    }
+})();
+
 window.addEventListener('load', function() {
     const loader = document.getElementById('globalLoadingScreen');
     if (loader) {
         loader.style.display = 'none';
+    }
+    // Ensure dark mode class is applied after body is fully ready
+    if (localStorage.getItem('darkMode') === 'on') {
+        document.body.classList.add('dark');
     }
 });
 
@@ -21,6 +33,14 @@ function initDashboard() {
         if (greetingNameEl) greetingNameEl.textContent = currentUser.firstName;
         if (dropdownUserName) dropdownUserName.textContent = currentUser.firstName + " " + (currentUser.lastName || '');
         if (dropdownUserEmail) dropdownUserEmail.textContent = currentUser.email;
+
+        // Load profile photo into the navbar avatar on ALL pages
+        if (currentUser.profilePhoto) {
+            const avatarEls = document.querySelectorAll('.avatar');
+            avatarEls.forEach(function(avatarEl) {
+                avatarEl.innerHTML = '<img src="' + currentUser.profilePhoto + '" alt="Profile" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
+            });
+        }
     } else {
         window.location.replace('signin.html');
         return;
@@ -325,12 +345,14 @@ document.addEventListener('click', (e) => {
     }
 });
 
-function setModalAmount(amount) {
+function setModalAmount(amount, event) {
     const input = document.getElementById('payAmountInput');
     if (input) input.value = amount;
 
     document.querySelectorAll('.pay-quick-pill').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    // Use the passed event if available, otherwise try global event
+    var clickedBtn = (event && event.target) ? event.target : null;
+    if (clickedBtn) clickedBtn.classList.add('active');
 }
 
 
@@ -346,9 +368,10 @@ function initiatePaystackPayment() {
         return;
     }
 
-    const allUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    const email = allUsers.length > 0 && allUsers[allUsers.length - 1].email
-        ? allUsers[allUsers.length - 1].email
+    // Always use the currently logged-in user's email for Paystack
+    const currentUserData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const email = (currentUserData && currentUserData.email)
+        ? currentUserData.email
         : 'customer@cowrywise.demo';
 
     btn.disabled = true;
@@ -361,34 +384,61 @@ function initiatePaystackPayment() {
         return;
     }
 
-    const handler = PaystackPop.setup({
+    // Shared config for both API versions
+    const paystackConfig = {
         key:      PAYSTACK_PUBLIC_KEY,
         email:    email,
         amount:   Math.round(amount * 100), // kobo
         currency: 'NGN',
         ref:      'CW_' + Date.now() + '_' + Math.floor(Math.random() * 1e6),
 
+        // Callbacks for newer API (newTransaction)
+        onSuccess: function(transaction) {
+            const newBalance = getStoredBalance() + amount;
+            saveBalance(newBalance);
+            renderBalance();
+            addNotification(`₦${amount.toLocaleString('en-NG')} successfully added to your Naira wallet.`, 'payment');
+            showPayStatus(`✅ Payment successful! ₦${amount.toLocaleString('en-NG')} added to your wallet.`, 'success');
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Payment Confirmed!';
+            setTimeout(() => closePaymentModal(), 2500);
+        },
+        onCancel: function() {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay Securely with Paystack';
+            showPayStatus('Payment window closed. Try again when ready.', 'warn');
+        },
+
+        // Callbacks for older API (setup/openIframe)
         callback: function(response) {
             const newBalance = getStoredBalance() + amount;
             saveBalance(newBalance);
             renderBalance();
-            
             addNotification(`₦${amount.toLocaleString('en-NG')} successfully added to your Naira wallet.`, 'payment');
-
             showPayStatus(`✅ Payment successful! ₦${amount.toLocaleString('en-NG')} added to your wallet.`, 'success');
             btn.innerHTML = '<i class="fa-solid fa-check"></i> Payment Confirmed!';
-
             setTimeout(() => closePaymentModal(), 2500);
         },
-
         onClose: function() {
             btn.disabled = false;
             btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay Securely with Paystack';
             showPayStatus('Payment window closed. Try again when ready.', 'warn');
         }
-    });
+    };
 
-    handler.openIframe();
+    // Use the newer newTransaction API if available (better mobile support),
+    // otherwise fall back to the older setup/openIframe approach
+    try {
+        if (typeof PaystackPop.newTransaction === 'function') {
+            PaystackPop.newTransaction(paystackConfig);
+        } else {
+            const handler = PaystackPop.setup(paystackConfig);
+            handler.openIframe();
+        }
+    } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay Securely with Paystack';
+        showPayStatus('⚠️ Could not open payment window. Please try again.', 'error');
+    }
 }
 
 

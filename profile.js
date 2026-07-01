@@ -58,6 +58,12 @@ function changePhoto(input) {
             }
         }
         localStorage.setItem('users', JSON.stringify(allUsers));
+
+        // Also update navbar avatar on this page immediately
+        var avatarEls = document.querySelectorAll('.avatar');
+        avatarEls.forEach(function(avatarEl) {
+            avatarEl.innerHTML = '<img src="' + e.target.result + '" alt="Profile" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
+        });
     };
     reader.readAsDataURL(file);
 }

@@ -71,6 +71,276 @@ body {
     --white: #ffffff;
 }
 
+/* ═══════════════════════════════════════
+   DARK MODE — Global rules for all pages
+   that use dashboard.css
+   ═══════════════════════════════════════ */
+body.dark {
+    background-color: #0f172a;
+    color: #e2e8f0;
+}
+
+body.dark .top-navbar {
+    background-color: #1e293b;
+    border-bottom: 1px solid #334155;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+body.dark .page-title {
+    color: #94a3b8;
+}
+
+body.dark .sidebar {
+    background-color: #1e293b;
+    border-right-color: #334155;
+}
+
+body.dark .greeting-text {
+    color: #64748b;
+}
+
+body.dark .user-name {
+    color: #e2e8f0;
+}
+
+body.dark .nav-links a {
+    color: #94a3b8;
+}
+
+body.dark .nav-links a:hover {
+    background-color: #0f172a;
+    color: #e2e8f0;
+}
+
+body.dark .nav-links li.active a {
+    background-color: #1e3a8a;
+    color: #60a5fa;
+}
+
+body.dark .main-content {
+    background-color: #0f172a;
+}
+
+body.dark .tabs {
+    background-color: #1e293b;
+}
+
+body.dark .tab {
+    color: #64748b;
+}
+
+body.dark .tab.active {
+    background-color: #1e3a8a;
+    color: #60a5fa;
+}
+
+body.dark .add-cash-section h3,
+body.dark .plan-section h3 {
+    color: #e2e8f0;
+}
+
+body.dark .pill {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+body.dark .pill:hover {
+    border-color: #60a5fa;
+    color: #60a5fa;
+}
+
+body.dark .pill.add-more {
+    color: #64748b;
+}
+
+body.dark .profile-dropdown,
+body.dark .notif-dropdown {
+    background-color: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+body.dark .profile-dropdown-header {
+    background-color: #0f172a;
+    border-bottom-color: #334155;
+}
+
+body.dark .profile-user-name {
+    color: #e2e8f0;
+}
+
+body.dark .profile-user-email {
+    color: #94a3b8;
+}
+
+body.dark .profile-dropdown-links a {
+    color: #94a3b8;
+}
+
+body.dark .profile-dropdown-links a:hover {
+    background-color: #0f172a;
+    color: #60a5fa;
+}
+
+body.dark .profile-dropdown-links a i {
+    color: #64748b;
+}
+
+body.dark .profile-dropdown-links .divider {
+    background-color: #334155;
+}
+
+body.dark .notif-dropdown-header {
+    border-bottom-color: #334155;
+}
+
+body.dark .notif-dropdown-header h4 {
+    color: #e2e8f0;
+}
+
+body.dark .notif-item {
+    border-bottom-color: #1e293b;
+}
+
+body.dark .notif-item:hover {
+    background-color: #0f172a;
+}
+
+body.dark .notif-item.unread {
+    background-color: #1e3a8a22;
+}
+
+body.dark .notif-text {
+    color: #94a3b8;
+}
+
+body.dark .notif-item.unread .notif-text {
+    color: #e2e8f0;
+}
+
+body.dark .portfolio-card {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+
+body.dark .p-card-header {
+    border-bottom-color: #334155;
+}
+
+body.dark .p-card-title,
+body.dark .p-card-body h3,
+body.dark .p-growth-amount,
+body.dark .legend-text {
+    color: #e2e8f0;
+}
+
+body.dark .p-card-footer {
+    background-color: #0f172a;
+    border-top-color: #334155;
+}
+
+body.dark .p-card-footer p {
+    color: #64748b;
+}
+
+body.dark .p-breakdown-bar {
+    background-color: #0f172a;
+}
+
+/* Save page dark mode */
+body.dark .save-header .balance-title,
+body.dark .invest-header .balance-title {
+    color: #94a3b8;
+}
+
+body.dark .plan-card {
+    background-color: #1e293b;
+    border-color: #334155 !important;
+}
+
+body.dark .plan-card h4,
+body.dark .invest-card h4 {
+    color: #e2e8f0;
+}
+
+body.dark .invest-card {
+    background-color: #1e293b;
+    border-color: #334155 !important;
+}
+
+body.dark .more-invest-card {
+    background-color: #1e293b;
+    border-color: #334155 !important;
+}
+
+body.dark .more-invest-card h4 {
+    color: #e2e8f0;
+}
+
+/* Mobile bottom nav dark mode */
+body.dark .mobile-bottom-nav {
+    background-color: #1e293b;
+    border-top-color: #334155;
+}
+
+body.dark .mobile-bottom-nav .nav-item {
+    color: #64748b;
+}
+
+body.dark .mobile-bottom-nav .nav-item.active {
+    color: #60a5fa;
+}
+
+/* Payment modal dark mode */
+body.dark .pay-modal-card {
+    background-color: #1e293b;
+}
+
+body.dark .pay-modal-header h2 {
+    color: #e2e8f0;
+}
+
+body.dark .pay-modal-header p {
+    color: #94a3b8;
+}
+
+body.dark .pay-quick-pill {
+    background-color: #0f172a;
+    color: #e2e8f0;
+}
+
+body.dark .pay-quick-pill:hover,
+body.dark .pay-quick-pill.active {
+    background-color: #1e3a8a;
+    border-color: #60a5fa;
+    color: #60a5fa;
+}
+
+body.dark .pay-input-group {
+    background-color: #0f172a;
+    border-color: #334155;
+}
+
+body.dark .pay-currency-label,
+body.dark .pay-amount-input {
+    color: #e2e8f0;
+}
+
+body.dark .pay-min-note {
+    color: #64748b;
+}
+
+body.dark .pay-modal-close {
+    background-color: #0f172a;
+    color: #94a3b8;
+}
+
+/* Sidebar backdrop in dark mode */
+body.dark .sidebar-backdrop {
+    background: rgba(0, 0, 0, 0.7);
+}
+
 /* Top Navbar */
 .top-navbar {
     display: flex;
