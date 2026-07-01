@@ -1,0 +1,265 @@
+/* Save Page Specific Styles */
+.save-main {
+    padding: 40px;
+    max-width: 1200px;
+}
+
+/* Save Header (Balance) */
+.save-header {
+    margin-bottom: 30px;
+}
+
+.save-header .balance-title {
+    color: #6c82a3;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.save-header .balance-amount {
+    color: var(--dark-blue);
+    font-size: 40px;
+    font-weight: 700;
+    margin-top: 10px;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.save-header .big-num {
+    font-size: 55px;
+}
+
+.save-header .decimals {
+    font-size: 24px;
+    color: #6c82a3;
+}
+
+/* Add Cash Section */
+.add-cash-section {
+    margin-bottom: 40px;
+}
+
+.add-cash-section h3 {
+    font-size: 16px;
+    color: var(--dark-blue);
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.cash-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.pill {
+    background-color: #f7fafc;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 20px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--dark-blue);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pill.add-more {
+    color: var(--primary-blue);
+    background-color: #f0f5ff;
+}
+
+/* Plan Sections (Horizontal Scroll) */
+.plan-section {
+    margin-bottom: 40px;
+}
+
+.plan-section h3 {
+    font-size: 16px;
+    color: var(--dark-blue);
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.plan-cards-container {
+    overflow-x: auto;
+    padding-bottom: 10px;
+    /* Hide scrollbar for clean look */
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+}
+
+.plan-cards-container::-webkit-scrollbar {
+    display: none;
+}
+
+.plan-cards {
+    display: flex;
+    gap: 15px;
+    width: max-content;
+}
+
+@media (min-width: 901px) {
+    .plan-cards-container {
+        overflow-x: visible;
+    }
+    .plan-cards {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}
+
+/* Plan Card Base */
+.plan-card {
+    width: 170px;
+    height: 170px;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.plan-card:active {
+    transform: scale(0.98);
+}
+
+/* Add Plan Card (The plus button) */
+.add-plan-card {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    align-items: center;
+    justify-content: center;
+}
+
+.add-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #f0f5ff;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+/* Card Icons */
+.card-icon {
+    font-size: 40px;
+    margin-bottom: auto;
+}
+
+.blue-icon { color: #3b82f6; }
+.purple-icon { color: #8b5cf6; }
+.green-icon { color: #10b981; }
+.orange-icon { color: #f97316; }
+.red-icon { color: #ef4444; }
+.red-heart-icon { color: #e11d48; }
+
+/* Card Info */
+.card-info {
+    margin-top: auto;
+}
+
+.card-info h4 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--dark-blue);
+    margin-bottom: 8px;
+}
+
+.empty-badge {
+    background-color: rgba(255, 255, 255, 0.7);
+    color: #a0aec0;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.next-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-gray);
+    font-size: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Card Background Colors (Matching screenshots) */
+.general-card { background-color: #e6f7ff; }
+.emergency-card { background-color: #f3e8ff; }
+.home-card { background-color: #dcfce7; }
+.study-card { background-color: #fff7ed; }
+.car-card { background-color: #ffe4e6; }
+.duo-card { background-color: #ffe4e6; }
+.football-card { background-color: #dcfce7; }
+.basketball-card { background-color: #f3e8ff; }
+
+/* Mobile Bottom Navigation */
+.mobile-bottom-nav {
+    display: none; /* Hidden by default on desktop */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border-top: 1px solid var(--border-color);
+    padding: 12px 20px;
+    justify-content: space-between;
+    z-index: 1000;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #a0aec0;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.nav-item i {
+    font-size: 20px;
+    margin-bottom: 2px;
+}
+
+.nav-item.active {
+    color: var(--primary-blue);
+}
+
+/* Responsive Overrides */
+@media (max-width: 900px) {
+    .sidebar {
+        display: none; /* Hide desktop sidebar on mobile */
+    }
+    .mobile-bottom-nav {
+        display: flex;
+    }
+    .dashboard-layout {
+        min-height: calc(100vh - 140px); /* Adjust for top and bottom navs */
+    }
+    .save-main {
+        padding-bottom: 80px; /* Space for bottom nav */
+        width: 100%;
+    }
+}

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cowrywise Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div id="globalLoadingScreen">
+        <img src="./gif-logo-loading.gif" alt="Loading...">
+    </div>
+
+    <!-- PIN Security Overlay -->
+    <div id="pinSecurityOverlay">
+        <div class="pin-modal">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-lock" style="font-size: 32px; color: #0a2e65; margin-bottom: 15px;"></i>
+                <h2 id="pinModalTitle" style="color: #0a2e65; font-size: 24px; font-weight: 600;">Create PIN</h2>
+                <p id="pinModalDesc" style="color: #6c82a3; font-size: 14px; margin-top: 10px;">Your PIN adds an extra layer of security to your Cowrywise account</p>
+            </div>
+            
+            <div id="createPinSection">
+                <label style="display: block; text-align: center; font-size: 13px; color: #6c82a3; margin-bottom: 10px;">Create your PIN</label>
+                <div class="pin-inputs" id="createPinInputs">
+                    <input type="password" maxlength="1" onkeyup="moveToNext(this, event)">
+                    <input type="password" maxlength="1" onkeyup="moveToNext(this, event)">
+                    <input type="password" maxlength="1" onkeyup="moveToNext(this, event)">
+                    <input type="password" maxlength="1" onkeyup="moveToNext(this, event)">
+                </div>
+                
+                <label style="display: block; text-align: center; font-size: 13px; color: #6c82a3; margin-top: 20px; margin-bottom: 10px;">Confirm your PIN</label>
+                <div class="pin-inputs" id="confirmPinInputs">
+                    <input type="password" maxlength="1" onkeyup="moveToNext(this, event)">
+                    <input type="password" maxlength="1" onkeyup="moveToNext(this, event)">
+                    <input type="password" maxlength="1" onkeyup="moveToNext(this, event)">
+                    <input type="password" maxlength="1" onkeyup="moveToNext(this, event)">
+                </div>
+            </div>
+            
+            <button id="pinActionBtn" onclick="handlePinCreate()" style="width: 100%; padding: 15px; background-color: #0054ff; color: white; border: none; border-radius: 5px; font-weight: 600; margin-top: 30px; cursor: pointer;">Create PIN</button>
+        </div>
+    </div>
+    
+    <!-- Top Navbar -->
+    <nav class="top-navbar">
+        <!-- Hamburger (mobile only) -->
+        <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Open menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="logo">
+            <img src="./img/imgi_2_dashboard-logo.svg" alt="Cowrywise Logo" style="height: 32px; width: auto;">
+        </div>
+        <div class="page-title">
+            ACCOUNT OVERVIEW
+        </div>
+        <div class="user-actions">
+            <span class="seed-badge"><i class="fa-solid fa-leaf"></i> Seed</span>
+            
+            <!-- Notifications Dropdown -->
+            <div class="notification-container">
+                <button class="icon-btn" id="notifBellBtn" aria-label="Notifications" onclick="toggleNotifDropdown(event)">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge" id="notifBadge" style="display: none;"></span>
+                </button>
+                <div class="notif-dropdown" id="notifDropdown" style="display: none;">
+                    <div class="notif-dropdown-header">
+                        <h4>Notifications</h4>
+                        <button class="mark-all-read-btn" onclick="markAllNotificationsRead(event)">Mark all read</button>
+                    </div>
+                    <div class="notif-items-list" id="notifItemsList">
+                        <!-- Dynamic items -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Dropdown -->
+            <div class="profile-container">
+                <div class="profile-menu" id="profileMenuBtn" onclick="toggleProfileDropdown(event)">
+                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown" style="display: none;">
+                    <div class="profile-dropdown-header">
+                        <span class="profile-user-name" id="dropdownUserName">User</span>
+                        <span class="profile-user-email" id="dropdownUserEmail">user@example.com</span>
+                    </div>
+                    <ul class="profile-dropdown-links">
+                        <li><a href="profile.html"><i class="fa-regular fa-user"></i> My Profile</a></li>
+                        <li><a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" onclick="handleSignOut(event)" class="signout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar backdrop (mobile only) -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="greeting">
+                <span class="greeting-text">Howdy</span> 
+                <span class="user-name" id="userGreetingName">Adeola</span>
+            </div>
+            
+            <ul class="nav-links">
+                <li class="active"><a href="#" onclick="closeSidebar()"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li><a href="#" onclick="navigateToSave(event); closeSidebar()"><i class="fa-solid fa-bullseye"></i> Save</a></li>
+                <li><a href="#" onclick="navigateToInvest(event); closeSidebar()"><i class="fa-solid fa-chart-line"></i> Invest</a></li>
+                <li><a href="#" onclick="closeSidebar()"><i class="fa-solid fa-egg"></i> Nest</a></li>
+                <li><a href="#" onclick="closeSidebar()"><i class="fa-regular fa-credit-card"></i> Payment</a></li>
+                <li><a href="#" onclick="closeSidebar()"><i class="fa-solid fa-piggy-bank"></i> Stash</a></li>
+                <li><a href="#" onclick="closeSidebar()"><i class="fa-solid fa-book-open"></i> Learn</a></li>
+                <li><a href="#" onclick="closeSidebar()"><i class="fa-solid fa-user-group"></i> Referral</a></li>
+                <li><a href="settings.html" onclick="closeSidebar()"><i class="fa-solid fa-gear"></i> Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <div class="tabs">
+                <button class="tab active" id="tabHome" onclick="switchTab('home')">Home</button>
+                <button class="tab" id="tabPortfolio" onclick="switchTab('portfolio')">Portfolio</button>
+            </div>
+
+            <!-- Home Content View -->
+            <div class="dashboard-grid" id="homeContentView">
+                
+                <!-- Left Column -->
+                <div class="grid-left">
+                    <!-- Balance Card -->
+                    <div class="balance-card">
+                        <div class="balance-header">
+                            <span class="balance-title">Naira Balance <i class="fa-regular fa-eye visibility-toggle" id="toggleBalance"></i></span>
+                            <i class="fa-solid fa-bolt lightning-icon"></i>
+                        </div>
+                        <div class="balance-amount" id="balanceAmount">₦ <span id="balanceMain">0</span><span class="decimals">.00</span></div>
+                        <div class="balance-footer">
+                            <div class="return-badge"><span class="dot"></span> NO return in Jun <i class="fa-solid fa-chevron-up"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="grid-right">
+                    <!-- Add Cash -->
+                    <div class="add-cash-section">
+                        <h3>Add cash</h3>
+                        <div class="cash-pills">
+                            <button class="pill" onclick="openPaymentModal(20000)">₦ 20K</button>
+                            <button class="pill" onclick="openPaymentModal(50000)">₦ 50K</button>
+                            <button class="pill" onclick="openPaymentModal(100000)">₦ 100K</button>
+                            <button class="pill" onclick="openPaymentModal(null, 'USD', 100)">$100</button>
+                            <button class="pill" onclick="openPaymentModal(null, 'USD', 200)">$200</button>
+                            <button class="pill add-more" onclick="openPaymentModal()">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Promo Banner Slider -->
+                    <div class="promo-slider" id="promoSlider">
+                        <div class="promo-slide active">
+                            <img src="./img/imgi_18_AppCard_WorldCup.png" alt="World Cup Promo">
+                        </div>
+                        <div class="promo-slide">
+                            <img src="./img/imgi_19_AppCard_Sprout.png" alt="Sprout Promo">
+                        </div>
+                        <div class="promo-slide">
+                            <img src="./img/imgi_20_AppCard_Stocks.png" alt="Stocks Promo">
+                        </div>
+                        <div class="promo-slide">
+                            <img src="./img/imgi_21_AppCard_Youtube.png" alt="Youtube Promo">
+                        </div>
+                        <div class="promo-dots" id="promoDots">
+                            <span class="promo-dot active" onclick="goToSlide(0)"></span>
+                            <span class="promo-dot" onclick="goToSlide(1)"></span>
+                            <span class="promo-dot" onclick="goToSlide(2)"></span>
+                            <span class="promo-dot" onclick="goToSlide(3)"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Portfolio Content View -->
+            <div class="portfolio-grid" id="portfolioContentView" style="display: none;">
+                <div class="portfolio-actions">
+                    <a href="#" class="request-letter-link">
+                        <i class="fa-regular fa-envelope"></i> Request investment letter
+                    </a>
+                </div>
+
+                <div class="portfolio-cards-container">
+                    <!-- Growth Card -->
+                    <div class="portfolio-card growth-card">
+                        <div class="p-card-header">
+                            <div class="p-card-title-group">
+                                <span class="p-card-indicator green"></span>
+                                <span class="p-card-title">Growth</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right p-card-chevron"></i>
+                        </div>
+                        <div class="p-card-body">
+                            <h3>Your portfolio balance has remained the same year to date.</h3>
+                            <p class="p-today-label">Today</p>
+                            <div class="p-growth-amount" id="portfolioGrowthAmount">₦ 0K</div>
+                            
+                            <!-- Line Chart Area -->
+                            <div class="p-chart-container">
+                                <svg class="p-line-chart" viewBox="0 0 500 120" preserveAspectRatio="none">
+                                    <!-- Grid lines / dots -->
+                                    <line x1="0" y1="100" x2="500" y2="100" stroke="#f1f5f9" stroke-width="2" />
+                                    <!-- Simple dynamic-looking horizontal lines / dots -->
+                                    <g stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4">
+                                        <line x1="60" y1="10" x2="60" y2="110" />
+                                        <line x1="120" y1="10" x2="120" y2="110" />
+                                        <line x1="180" y1="10" x2="180" y2="110" />
+                                        <line x1="240" y1="10" x2="240" y2="110" />
+                                        <line x1="300" y1="10" x2="300" y2="110" />
+                                        <line x1="360" y1="10" x2="360" y2="110" />
+                                        <line x1="420" y1="10" x2="420" y2="110" />
+                                    </g>
+                                    <!-- Chart line (dynamic path) -->
+                                    <path id="chartPath" d="M 0 100 L 60 100 L 120 100 L 180 100 L 240 100 L 300 100 L 360 100 L 420 100 L 500 100" fill="none" stroke="#0054ff" stroke-width="3" stroke-linecap="round" />
+                                    <circle id="chartEndpoint" cx="500" cy="100" r="4" fill="#0054ff" stroke="#fff" stroke-width="2" />
+                                </svg>
+                                <div class="p-chart-labels">
+                                    <span>JAN</span>
+                                    <span>•</span>
+                                    <span>•</span>
+                                    <span>•</span>
+                                    <span>•</span>
+                                    <span>•</span>
+                                    <span>•</span>
+                                    <span>•</span>
+                                    <span>DEC</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-card-footer">
+                            <p>Steady progress. Sometimes holding your ground is growth too.</p>
+                        </div>
+                    </div>
+
+                    <!-- Earnings Card -->
+                    <div class="portfolio-card earnings-card">
+                        <div class="p-card-header">
+                            <div class="p-card-title-group">
+                                <span class="p-card-indicator light-green"></span>
+                                <span class="p-card-title">Earnings</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right p-card-chevron"></i>
+                        </div>
+                        <div class="p-card-body p-center-content">
+                            <div class="no-data-illustration">
+                                <div class="no-data-bars">
+                                    <div class="nd-bar"></div>
+                                    <div class="nd-bar tall"></div>
+                                    <div class="nd-bar"></div>
+                                </div>
+                                <p>No data yet</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Breakdown Card -->
+                    <div class="portfolio-card breakdown-card">
+                        <div class="p-card-header">
+                            <div class="p-card-title-group">
+                                <span class="p-card-indicator pie-green"></span>
+                                <span class="p-card-title">Breakdown</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right p-card-chevron"></i>
+                        </div>
+                        <div class="p-card-body">
+                            <div class="p-breakdown-progress-wrapper">
+                                <div class="p-breakdown-bar">
+                                    <div class="p-breakdown-fill"></div>
+                                </div>
+                                <div class="p-breakdown-legend">
+                                    <span class="legend-color-box"></span>
+                                    <span class="legend-text">Investments: 100.00%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-card-footer">
+                            <p>Consider saving regularly to build a strong financial foundation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="support-btn" aria-label="Chat support"><i class="fa-solid fa-expand"></i></button>
+        </main>
+    </div>
+
+    <!-- ===== PAYMENT MODAL ===== -->
+    <div id="paymentModal" class="pay-modal-overlay" style="display:none;">
+        <div class="pay-modal-card">
+            <button class="pay-modal-close" onclick="closePaymentModal()" aria-label="Close">&times;</button>
+            <div class="pay-modal-header">
+                <div class="pay-modal-icon"><i class="fa-solid fa-wallet"></i></div>
+                <h2>Fund Your Wallet</h2>
+                <p>Enter the amount you want to add to your Cowrywise balance.</p>
+            </div>
+
+            <div class="pay-modal-body">
+                <!-- Quick amounts -->
+                <div class="pay-quick-pills">
+                    <button class="pay-quick-pill" onclick="setModalAmount(5000)">₦5K</button>
+                    <button class="pay-quick-pill" onclick="setModalAmount(10000)">₦10K</button>
+                    <button class="pay-quick-pill" onclick="setModalAmount(20000)">₦20K</button>
+                    <button class="pay-quick-pill" onclick="setModalAmount(50000)">₦50K</button>
+                    <button class="pay-quick-pill" onclick="setModalAmount(100000)">₦100K</button>
+                </div>
+
+                <div class="pay-input-group">
+                    <span class="pay-currency-label">₦</span>
+                    <input
+                        type="number"
+                        id="payAmountInput"
+                        class="pay-amount-input"
+                        placeholder="Enter amount"
+                        min="100"
+                        step="100"
+                    />
+                </div>
+                <p class="pay-min-note">Minimum deposit: ₦100</p>
+
+                <div id="payStatusMsg" class="pay-status-msg" style="display:none;"></div>
+
+                <button id="payNowBtn" class="pay-now-btn" onclick="initiatePaystackPayment()">
+                    <i class="fa-solid fa-lock"></i> Pay Securely with Paystack
+                </button>
+
+                <div class="pay-footer-note">
+                    <i class="fa-solid fa-shield-halved"></i> Secured by Paystack · SSL Encrypted
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ========================= -->
+
+    <!-- Settings Modal -->
+    <div id="settingsModalOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 100000;">
+        <div style="background-color: white; width: 500px; max-width: 90%; border-radius: 12px; padding: 30px; position: relative; max-height: 90vh; overflow-y: auto;">
+            <i class="fa-solid fa-xmark" style="position: absolute; top: 20px; right: 20px; cursor: pointer; color: #8e9bbd; font-size: 20px;" onclick="closeSettingsModal()"></i>
+            <h3 style="color: #0a2e65; font-size: 22px; margin-bottom: 20px;">Settings & Profile</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                <div>
+                    <label style="display: block; font-size: 13px; color: #6c82a3; margin-bottom: 5px;">First Name</label>
+                    <input type="text" id="setFirstName" style="width: 100%; padding: 10px; border: 1px solid #dbe2f2; border-radius: 5px;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 13px; color: #6c82a3; margin-bottom: 5px;">Last Name</label>
+                    <input type="text" id="setLastName" style="width: 100%; padding: 10px; border: 1px solid #dbe2f2; border-radius: 5px;">
+                </div>
+                <div style="grid-column: span 2;">
+                    <label style="display: block; font-size: 13px; color: #6c82a3; margin-bottom: 5px;">Email (Cannot be changed)</label>
+                    <input type="email" id="setEmail" readonly style="width: 100%; padding: 10px; border: 1px solid #dbe2f2; border-radius: 5px; background-color: #f8f9fa;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 13px; color: #6c82a3; margin-bottom: 5px;">Sex</label>
+                    <select id="setSex" style="width: 100%; padding: 10px; border: 1px solid #dbe2f2; border-radius: 5px;">
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 13px; color: #6c82a3; margin-bottom: 5px;">Location</label>
+                    <input type="text" id="setLocation" style="width: 100%; padding: 10px; border: 1px solid #dbe2f2; border-radius: 5px;">
+                </div>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid #eef3fa; margin: 20px 0;">
+            
+            <h4 style="color: #0a2e65; font-size: 16px; margin-bottom: 15px;">Security</h4>
+            <div style="display: flex; gap: 15px; margin-bottom: 25px;">
+                <div style="flex: 1;">
+                    <label style="display: block; font-size: 13px; color: #6c82a3; margin-bottom: 5px;">New Dashboard PIN</label>
+                    <input type="password" id="setNewPin" maxlength="4" placeholder="4 digits" style="width: 100%; padding: 10px; border: 1px solid #dbe2f2; border-radius: 5px; text-align: center; letter-spacing: 5px; font-size: 16px;">
+                </div>
+            </div>
+            
+            <button onclick="saveSettings()" style="width: 100%; padding: 12px; background-color: #0054ff; color: white; border: none; border-radius: 5px; font-weight: 600; cursor: pointer;">Save Changes</button>
+        </div>
+    </div>
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save - Cowrywise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="save.css">
+    <script>
+        // Session Guard: Check if currentUser is signed in
+        if (!localStorage.getItem('currentUser')) {
+            window.location.replace('signin.html');
+        }
+    </script>
+</head>
+<body>
+    
+    <!-- Top Navbar -->
+    <nav class="top-navbar">
+        <div class="logo">
+            <img src="./img/imgi_2_dashboard-logo.svg" alt="Cowrywise Logo" style="height: 28px; width: auto;">
+        </div>
+        <div class="page-title">
+            SAVE
+        </div>
+        <div class="user-actions">
+            <span class="seed-badge"><i class="fa-solid fa-leaf"></i> Seed</span>
+            
+            <!-- Notifications Dropdown -->
+            <div class="notification-container">
+                <button class="icon-btn" id="notifBellBtn" aria-label="Notifications" onclick="toggleNotifDropdown(event)">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge" id="notifBadge" style="display: none;"></span>
+                </button>
+                <div class="notif-dropdown" id="notifDropdown" style="display: none;">
+                    <div class="notif-dropdown-header">
+                        <h4>Notifications</h4>
+                        <button class="mark-all-read-btn" onclick="markAllNotificationsRead(event)">Mark all read</button>
+                    </div>
+                    <div class="notif-items-list" id="notifItemsList">
+                        <!-- Dynamic items -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Dropdown -->
+            <div class="profile-container">
+                <div class="profile-menu" id="profileMenuBtn" onclick="toggleProfileDropdown(event)">
+                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown" style="display: none;">
+                    <div class="profile-dropdown-header">
+                        <span class="profile-user-name" id="dropdownUserName">User</span>
+                        <span class="profile-user-email" id="dropdownUserEmail">user@example.com</span>
+                    </div>
+                    <ul class="profile-dropdown-links">
+                        <li><a href="dashboard.html"><i class="fa-regular fa-user"></i> My Profile</a></li>
+                        <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" onclick="handleSignOut(event)" class="signout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar (Desktop) -->
+        <aside class="sidebar">
+            <div class="greeting">
+                <span class="greeting-text">Howdy</span> 
+                <span class="user-name" id="userGreetingName">Adeola</span>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li class="active"><a href="#"><i class="fa-solid fa-bullseye"></i> Save</a></li>
+                <li><a href="#" onclick="navigateToInvest(event)"><i class="fa-solid fa-chart-line"></i> Invest</a></li>
+                <li><a href="#"><i class="fa-solid fa-egg"></i> Nest</a></li>
+                <li><a href="#"><i class="fa-regular fa-credit-card"></i> Payment</a></li>
+                <li><a href="#"><i class="fa-solid fa-piggy-bank"></i> Stash</a></li>
+                <li><a href="#"><i class="fa-solid fa-book-open"></i> Learn</a></li>
+                <li><a href="#"><i class="fa-solid fa-user-group"></i> Referral</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content save-main">
+            
+            <!-- Savings Balance -->
+            <div class="save-header">
+                <span class="balance-title">Savings Balance <i class="fa-regular fa-eye visibility-toggle" id="toggleBalance"></i></span>
+                <div class="balance-amount" id="balanceAmount">₦ <span class="big-num">0</span><span class="decimals">.00</span></div>
+            </div>
+
+            <!-- Add Cash -->
+            <div class="add-cash-section">
+                <h3>Add cash</h3>
+                <div class="cash-pills">
+                    <button class="pill">₦ 20K</button>
+                    <button class="pill">₦ 50K</button>
+                    <button class="pill">₦ 100K</button>
+                    <button class="pill">₦ 250K</button>
+                    <button class="pill">₦ 500K</button>
+                    <button class="pill add-more">+</button>
+                </div>
+            </div>
+
+            <!-- Save by myself -->
+            <div class="plan-section">
+                <h3>Save by myself</h3>
+                <div class="plan-cards-container">
+                    <div class="plan-cards">
+                        <!-- Add Plan Card -->
+                        <div class="plan-card add-plan-card">
+                            <div class="add-icon">
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- General Plan -->
+                        <div class="plan-card general-card">
+                            <div class="card-icon blue-icon">
+                                <i class="fa-solid fa-jar"></i>
+                            </div>
+                            <div class="card-info">
+                                <h4>General</h4>
+                                <span class="empty-badge">EMPTY</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right next-arrow"></i>
+                        </div>
+
+                        <!-- Emergency Plan -->
+                        <div class="plan-card emergency-card">
+                            <div class="card-icon purple-icon">
+                                <i class="fa-solid fa-umbrella"></i>
+                            </div>
+                            <div class="card-info">
+                                <h4>Emergency</h4>
+                                <span class="empty-badge">EMPTY</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right next-arrow"></i>
+                        </div>
+                        
+                        <!-- Home Plan -->
+                        <div class="plan-card home-card">
+                            <div class="card-icon green-icon">
+                                <i class="fa-solid fa-house"></i>
+                            </div>
+                            <div class="card-info">
+                                <h4>Home</h4>
+                                <span class="empty-badge">EMPTY</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right next-arrow"></i>
+                        </div>
+
+                        <!-- Study Plan -->
+                        <div class="plan-card study-card">
+                            <div class="card-icon orange-icon">
+                                <i class="fa-solid fa-book"></i>
+                            </div>
+                            <div class="card-info">
+                                <h4>Study</h4>
+                                <span class="empty-badge">EMPTY</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right next-arrow"></i>
+                        </div>
+
+                        <!-- Car Plan -->
+                        <div class="plan-card car-card">
+                            <div class="card-icon red-icon">
+                                <i class="fa-solid fa-car"></i>
+                            </div>
+                            <div class="card-info">
+                                <h4>Car</h4>
+                                <span class="empty-badge">EMPTY</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right next-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save with others -->
+            <div class="plan-section">
+                <h3>Save with others</h3>
+                <div class="plan-cards-container">
+                    <div class="plan-cards">
+                        <!-- Add Plan Card -->
+                        <div class="plan-card add-plan-card">
+                            <div class="add-icon">
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                        </div>
+
+                        <!-- Money Duo -->
+                        <div class="plan-card duo-card">
+                            <div class="card-icon red-heart-icon">
+                                <i class="fa-solid fa-heart"></i>
+                            </div>
+                            <div class="card-info">
+                                <h4>Money Duo</h4>
+                                <span class="empty-badge">EMPTY</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right next-arrow"></i>
+                        </div>
+
+                        <!-- Football -->
+                        <div class="plan-card football-card">
+                            <div class="card-icon green-icon">
+                                <i class="fa-solid fa-futbol"></i>
+                            </div>
+                            <div class="card-info">
+                                <h4>Football</h4>
+                                <span class="empty-badge">EMPTY</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right next-arrow"></i>
+                        </div>
+
+                        <!-- Basketball -->
+                        <div class="plan-card basketball-card">
+                            <div class="card-icon purple-icon">
+                                <i class="fa-solid fa-basketball"></i>
+                            </div>
+                            <div class="card-info">
+                                <h4>Basketball</h4>
+                                <span class="empty-badge">EMPTY</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right next-arrow"></i>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item active">
+            <i class="fa-solid fa-bullseye"></i>
+            <span>Save</span>
+        </a>
+        <a href="#" onclick="navigateToInvest(event)" class="nav-item">
+            <i class="fa-solid fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-cloud"></i>
+            <span>Nest</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-regular fa-credit-card"></i>
+            <span>Payment</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>Stash</span>
+        </a>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

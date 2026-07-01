@@ -1,0 +1,260 @@
+*{
+    padding: 0%;
+    margin: 0%;
+    box-sizing: border-box;
+}
+
+#globalLoadingScreen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #eef3fa;
+    display: flex; justify-content: center; align-items: center;
+    z-index: 999999;
+}
+#globalLoadingScreen img {
+    width: 200px;
+    height: auto;
+    border-radius: 16px;
+}
+.container {
+  max-width: 1200px;  
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;  
+  padding-right: 16px;
+}
+.image{
+  margin-top: 3%;
+ padding-bottom: 90px;
+}
+html body {
+  background-color:#f4f7fa;
+}
+.auth-intro{
+  
+    margin-left: 2%;
+}
+.jump{
+ color: #0a2e65;
+ font-size: 60px;
+ font-weight: bold;
+}
+.sign{
+color: #adbacd;
+font-weight: bold;
+font-size: 30px;
+}
+.new{
+  color: #8598b3;
+}
+.auth-header-row{
+    display: flex;
+    font-size: 18px;
+}
+.create-account-link{
+color: blue;
+text-decoration: none;
+}
+.auth-panel{
+ background: #fff;
+  padding-top: 50px;
+  padding-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  justify-content: center;
+  text-align: center;
+  gap: 10px;      
+  padding-left: 50px;
+ padding-right: 50px;
+ margin: 0 auto;
+}
+
+
+.google-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 55px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #dbe2f2;
+  background: white;
+  font-weight: 600;
+  color: #293869;
+  cursor: pointer;
+  transition: all 0.4s ease;  
+  padding-left: 15px;  
+  padding-right: 15px;  
+}
+form{
+    margin-left: 30px;
+    margin-right: 30px;
+}
+.google-btn img {
+  width: 20px;
+  height: 20px;
+}
+.google-btn:hover {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.apple-btn img {
+  width: 20px;
+  height: 20px;
+}
+.apple-btn:hover {
+   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.signin{
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+
+.separator {
+  display: flex;         
+  align-items: center;    
+  text-align: center;     
+  color: #888;          
+  margin: 20px 0;       
+}
+
+.separator::before,
+.separator::after {
+  content: "";            
+  flex: 1;                
+  border-bottom: 1px solid #ddd;
+}
+
+.separator::before {
+  margin-right: 15px;  
+}
+
+.separator::after {
+  margin-left: 15px;
+}
+input{
+  width: 100%;
+  min-height: 56px;
+  border-radius: 5px;
+  border: 1px solid #c4c7cf;
+  padding: 0 16px;
+  font-size: 1rem;
+  color: #0f2147;
+}
+.signup-fields{ 
+    display: grid;
+    gap: 20px;
+   }
+  .password-row{
+    display: flex;
+    flex-direction: column;
+  } 
+  .password-row a{
+    color: #346cef;
+    text-decoration: none;
+    text-align: left;
+    font-weight: 500;
+  }
+  .submit-button {
+  width: 100%;
+  min-height: 56px;
+  border: none;
+  border-radius: 5px;
+  background: #0054ff;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.submit-button a{
+  text-decoration: none;
+  color: white;
+}
+.auth-footer-info {
+  color: #6c7a9a;
+  font-size: 0.95rem;
+  text-align: center;
+ margin-left: 8.5%;
+}
+
+.auth-footer-info a {
+  color: #0054ff;
+  text-decoration: none;
+  font-weight: 600;
+ 
+}
+
+.auth-legal-links {
+  display: flex;
+   justify-content: center;
+  gap: 10px;
+  color: #8e9bbd;
+  font-size: 15px;
+  margin-left: 59%;
+  margin-top: -3.5%;
+  
+
+}
+
+.auth-legal-links a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.support-button {
+  position: fixed;
+  right: 30px;
+  bottom: 24px;
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: 50%;
+  background: #0054ff;
+  color: white;
+  font-size: 1.15rem;
+  cursor: pointer;
+  box-shadow: 0 18px 30px rgba(0, 84, 255, 0.2);
+}
+
+@media screen and (max-width: 768px) {
+    .jump{
+        text-align: center;
+        font-size: 50px;
+    }
+    .sign{
+        text-align: center;
+        font-size: 30px;
+    }
+    .auth-header-row{
+       justify-content: center;
+    }
+    .auth-main{
+        display: flex;
+        flex-direction: column;
+    }
+    .signin{
+        display: flex;
+        flex-direction: column;
+    }
+    .auth-footer-info p{
+        text-align:center;
+        font-size: 12px;
+        margin-left: -2% ;
+    }
+    .auth-legal-links{
+        display: flex;
+        text-align: right;
+        margin-left: 50%;}
+        .google-btn{
+            width: 100%;
+            flex-direction: row;
+          }
+          .google{
+            display: flex;
+          
+          }
+}

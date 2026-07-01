@@ -1,0 +1,181 @@
+/* Invest Page Specific Styles */
+.balance-chevron {
+    color: var(--primary-blue);
+    font-size: 12px;
+    margin: 0 4px;
+    cursor: pointer;
+}
+
+.investments-container {
+    margin-bottom: 20px;
+}
+
+.invest-card {
+    background-color: #e6f6ff;
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.invest-card:active {
+    transform: scale(0.98);
+}
+
+.invest-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* CSS Approximation of the blue bucket logo */
+.bucket-icon {
+    width: 48px;
+    height: 52px;
+    background-color: #3b82f6;
+    border-radius: 4px 4px 12px 12px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #60a5fa;
+    box-shadow: inset 0 -10px 0 rgba(0,0,0,0.1);
+}
+
+.bucket-icon::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    width: 24px;
+    height: 12px;
+    border: 3px solid #60a5fa;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+}
+
+.bucket-icon .n-symbol {
+    color: white;
+    font-weight: 800;
+    font-size: 24px;
+    font-family: Arial, sans-serif;
+}
+
+.invest-info h4 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--dark-blue);
+    margin-bottom: 8px;
+}
+
+.invest-balance {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--dark-blue);
+}
+
+/* More to invest in Section */
+.more-invest-section {
+    margin-top: 40px;
+}
+
+.more-invest-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.more-invest-card {
+    border-radius: 20px;
+    padding: 20px;
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.more-invest-card:active {
+    transform: scale(0.98);
+}
+
+.more-invest-card h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--dark-blue);
+    position: relative;
+    z-index: 2;
+}
+
+.card-illustration {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    font-size: 120px;
+    opacity: 0.2;
+    z-index: 1;
+}
+
+/* Background Colors based on screenshot */
+.ng-stocks {
+    background-color: #bbf7d0; /* light green */
+}
+.ng-stocks .card-illustration {
+    color: #16a34a;
+    font-size: 100px;
+    bottom: -10px;
+    right: 0;
+}
+
+.naira-mutual {
+    background-color: #ffedd5; /* peach */
+}
+.naira-mutual .card-illustration {
+    color: #ea580c;
+    bottom: -15px;
+    right: -10px;
+}
+
+.dollar-mutual {
+    background-color: #e0e7ff; /* light blue/purple */
+    grid-column: span 2; /* Make it full width */
+}
+.dollar-mutual .card-illustration {
+    color: #4f46e5;
+    bottom: -30px;
+    right: 10px;
+}
+
+/* Learn More Link */
+.learn-more-link {
+    margin-top: 30px;
+    text-align: left;
+}
+
+.learn-more-link a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.learn-more-link a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Overrides for PC */
+@media (min-width: 901px) {
+    .more-invest-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .dollar-mutual {
+        grid-column: span 1; /* Reset full width to just take 1 column on PC */
+    }
+}

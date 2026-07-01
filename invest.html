@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invest - Cowrywise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="save.css">
+    <link rel="stylesheet" href="invest.css">
+    <script>
+        // Session Guard: Check if currentUser is signed in
+        if (!localStorage.getItem('currentUser')) {
+            window.location.replace('signin.html');
+        }
+    </script>
+</head>
+<body>
+    
+    <!-- Top Navbar -->
+    <nav class="top-navbar">
+        <div class="logo">
+            <img src="./img/imgi_2_dashboard-logo.svg" alt="Cowrywise Logo" style="height: 28px; width: auto;">
+        </div>
+        <div class="page-title">
+            INVEST
+        </div>
+        <div class="user-actions">
+            <span class="seed-badge"><i class="fa-solid fa-leaf"></i> Seed</span>
+            
+            <!-- Notifications Dropdown -->
+            <div class="notification-container">
+                <button class="icon-btn" id="notifBellBtn" aria-label="Notifications" onclick="toggleNotifDropdown(event)">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge" id="notifBadge" style="display: none;"></span>
+                </button>
+                <div class="notif-dropdown" id="notifDropdown" style="display: none;">
+                    <div class="notif-dropdown-header">
+                        <h4>Notifications</h4>
+                        <button class="mark-all-read-btn" onclick="markAllNotificationsRead(event)">Mark all read</button>
+                    </div>
+                    <div class="notif-items-list" id="notifItemsList">
+                        <!-- Dynamic items -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Dropdown -->
+            <div class="profile-container">
+                <div class="profile-menu" id="profileMenuBtn" onclick="toggleProfileDropdown(event)">
+                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown" style="display: none;">
+                    <div class="profile-dropdown-header">
+                        <span class="profile-user-name" id="dropdownUserName">User</span>
+                        <span class="profile-user-email" id="dropdownUserEmail">user@example.com</span>
+                    </div>
+                    <ul class="profile-dropdown-links">
+                        <li><a href="dashboard.html"><i class="fa-regular fa-user"></i> My Profile</a></li>
+                        <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" onclick="handleSignOut(event)" class="signout-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar (Desktop) -->
+        <aside class="sidebar">
+            <div class="greeting">
+                <span class="greeting-text">Howdy</span> 
+                <span class="user-name" id="userGreetingName">Adeola</span>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li><a href="#" onclick="navigateToSave(event)"><i class="fa-solid fa-bullseye"></i> Save</a></li>
+                <li class="active"><a href="#"><i class="fa-solid fa-chart-line"></i> Invest</a></li>
+                <li><a href="#"><i class="fa-solid fa-egg"></i> Nest</a></li>
+                <li><a href="#"><i class="fa-regular fa-credit-card"></i> Payment</a></li>
+                <li><a href="#"><i class="fa-solid fa-piggy-bank"></i> Stash</a></li>
+                <li><a href="#"><i class="fa-solid fa-book-open"></i> Learn</a></li>
+                <li><a href="#"><i class="fa-solid fa-user-group"></i> Referral</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content save-main invest-main">
+            
+            <!-- Invest Balance -->
+            <div class="save-header">
+                <span class="balance-title">Naira Balance <i class="fa-solid fa-chevron-down balance-chevron"></i> <i class="fa-regular fa-eye visibility-toggle" id="toggleBalance"></i></span>
+                <div class="balance-amount" id="balanceAmount">₦ <span class="big-num">0</span><span class="decimals">.00</span></div>
+            </div>
+
+            <!-- Add Cash -->
+            <div class="add-cash-section">
+                <h3>Add cash</h3>
+                <div class="cash-pills">
+                    <button class="pill">₦ 20K</button>
+                    <button class="pill">₦ 50K</button>
+                    <button class="pill">₦ 100K</button>
+                    <button class="pill">$ 100</button>
+                    <button class="pill">$ 200</button>
+                    <button class="pill add-more">+</button>
+                </div>
+            </div>
+
+            <!-- Investments -->
+            <div class="plan-section">
+                <h3>Investments</h3>
+                <div class="investments-container">
+                    <div class="invest-card naira-funds-card">
+                        <div class="invest-icon">
+                            <!-- CSS-based icon approximating the blue bucket -->
+                            <div class="bucket-icon">
+                                <span class="n-symbol">N</span>
+                            </div>
+                        </div>
+                        <div class="invest-info">
+                            <h4>Naira Funds</h4>
+                            <div class="invest-balance">₦ 0.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More to invest in -->
+            <div class="plan-section more-invest-section">
+                <h3>More to invest in</h3>
+                <div class="more-invest-grid">
+                    
+                    <!-- NG Stocks -->
+                    <div class="more-invest-card ng-stocks">
+                        <h4>NG Stocks</h4>
+                        <div class="card-illustration">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                    </div>
+
+                    <!-- Naira Mutual Funds -->
+                    <div class="more-invest-card naira-mutual">
+                        <h4>Naira Mutual Funds</h4>
+                        <div class="card-illustration">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                        </div>
+                    </div>
+
+                    <!-- Dollar Mutual Funds -->
+                    <div class="more-invest-card dollar-mutual">
+                        <h4>Dollar Mutual Funds</h4>
+                        <div class="card-illustration">
+                            <i class="fa-solid fa-money-bill-trend-up"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="learn-more-link">
+                <a href="#"><i class="fa-solid fa-circle-info"></i> Learn more about investments</a>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" onclick="navigateToSave(event)" class="nav-item">
+            <i class="fa-solid fa-bullseye"></i>
+            <span>Save</span>
+        </a>
+        <a href="#" class="nav-item active">
+            <i class="fa-solid fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-cloud"></i>
+            <span>Nest</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-regular fa-credit-card"></i>
+            <span>Payment</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>Stash</span>
+        </a>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

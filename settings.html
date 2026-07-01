@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Cowrywise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+
+    <div id="globalLoadingScreen">
+        <img src="./gif-logo-loading.gif" alt="Loading...">
+    </div>
+
+    <nav class="top-navbar">
+        <div class="logo">
+            <img src="./img/imgi_2_dashboard-logo.svg" alt="Cowrywise Logo" style="height: 32px; width: auto;">
+        </div>
+        <div class="page-title">SETTINGS</div>
+        <a href="dashboard.html" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Back
+        </a>
+    </nav>
+
+    <div class="settings-page">
+
+        <div class="settings-card">
+
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-moon"></i> Appearance</h3>
+                <div class="settings-row">
+                    <div>
+                        <p class="setting-label">Dark Mode</p>
+                        <p class="setting-sub">Switch to a dark colour scheme</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode(this)">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-lock"></i> Change PIN</h3>
+                <div class="settings-form">
+                    <div class="form-row">
+                        <label>New 4-Digit PIN</label>
+                        <input type="password" id="newPin" maxlength="4" placeholder="Enter new PIN" style="letter-spacing: 6px; text-align: center;">
+                    </div>
+                    <div class="form-row">
+                        <label>Confirm New PIN</label>
+                        <input type="password" id="confirmPin" maxlength="4" placeholder="Re-enter new PIN" style="letter-spacing: 6px; text-align: center;">
+                    </div>
+                    <button class="settings-btn" onclick="changePin()">Update PIN</button>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-key"></i> Change Password</h3>
+                <div class="settings-form">
+                    <div class="form-row">
+                        <label>Current Password</label>
+                        <input type="password" id="currentPassword" placeholder="Enter current password">
+                    </div>
+                    <div class="form-row">
+                        <label>New Password</label>
+                        <input type="password" id="newPassword" placeholder="Enter new password">
+                        <small id="passHint" style="color:#6c82a3; font-size:12px; margin-top:4px;">Min 8 chars, uppercase, lowercase, number & special character</small>
+                    </div>
+                    <div class="form-row">
+                        <label>Confirm New Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Re-enter new password">
+                    </div>
+                    <button class="settings-btn" onclick="changePassword()">Update Password</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="toastMsg" class="toast-msg" style="display:none;"></div>
+
+    <script src="settings.js"></script>
+</body>
+</html>
