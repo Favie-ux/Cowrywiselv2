@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fund Wallet - Cowrywise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="payment.css">
+    <script>
+        // Session guard — redirect if not logged in
+        if (!localStorage.getItem('currentUser')) {
+            window.location.replace('signin.html');
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="pay-navbar">
+        <a href="dashboard.html" class="pay-back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Back
+        </a>
+        <img src="./img/imgi_2_dashboard-logo.svg" alt="Cowrywise" class="pay-logo">
+        <div style="width: 60px;"></div> <!-- spacer for centering logo -->
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pay-page">
+
+        <!-- Card -->
+        <div class="pay-card">
+
+            <!-- Icon + Title -->
+            <div class="pay-card-top">
+                <div class="pay-wallet-icon">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <h1>Fund Your Wallet</h1>
+                <p>Choose or enter the amount to add to your Naira balance.</p>
+            </div>
+
+            <!-- Quick Pill Amounts -->
+            <div class="pay-pills-label">Quick amounts</div>
+            <div class="pay-pills">
+                <button class="pay-pill" onclick="selectAmount(5000, this)">₦5K</button>
+                <button class="pay-pill" onclick="selectAmount(10000, this)">₦10K</button>
+                <button class="pay-pill" onclick="selectAmount(20000, this)">₦20K</button>
+                <button class="pay-pill" onclick="selectAmount(50000, this)">₦50K</button>
+                <button class="pay-pill" onclick="selectAmount(100000, this)">₦100K</button>
+                <button class="pay-pill" onclick="selectAmount(200000, this)">₦200K</button>
+            </div>
+
+            <!-- Amount Input -->
+            <div class="pay-input-wrap">
+                <span class="pay-naira">₦</span>
+                <input
+                    type="number"
+                    id="amountInput"
+                    class="pay-amount-input"
+                    placeholder="Enter amount"
+                    min="100"
+                    step="100"
+                    oninput="clearPillActive()"
+                />
+            </div>
+            <p class="pay-min-note">Minimum: ₦100</p>
+
+            <!-- Status message -->
+            <div id="payStatusMsg" class="pay-status" style="display:none;"></div>
+
+            <!-- Pay Button -->
+            <button id="payBtn" class="pay-btn" onclick="startPayment()">
+                <i class="fa-solid fa-lock"></i> Pay Securely with Paystack
+            </button>
+
+            <!-- Security note -->
+            <div class="pay-secure-note">
+                <i class="fa-solid fa-shield-halved"></i> Secured by Paystack · SSL Encrypted
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="payment.js"></script>
+</body>
+</html>
