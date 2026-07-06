@@ -5,12 +5,15 @@ if (!localStorage.getItem('currentUser')) {
 }
 
 // Apply dark mode globally on every page load
-(function applyDarkModeEarly() {
+function applyDarkModeEarly() {
     if (localStorage.getItem('darkMode') === 'on') {
         document.documentElement.classList.add('dark');
-        document.body && document.body.classList.add('dark');
+        if (document.body) {
+            document.body.classList.add('dark');
+        }
     }
-})();
+}
+applyDarkModeEarly();
 
 window.addEventListener('load', function() {
     const loader = document.getElementById('globalLoadingScreen');
@@ -37,9 +40,10 @@ function initDashboard() {
         // Load profile photo into the navbar avatar on ALL pages
         if (currentUser.profilePhoto) {
             const avatarEls = document.querySelectorAll('.avatar');
-            avatarEls.forEach(function(avatarEl) {
+            for (let i = 0; i < avatarEls.length; i++) {
+                const avatarEl = avatarEls[i];
                 avatarEl.innerHTML = '<img src="' + currentUser.profilePhoto + '" alt="Profile" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
-            });
+            }
         }
     } else {
         window.location.replace('signin.html');
@@ -68,11 +72,11 @@ function setupPinSecurity(user) {
 
 window.moveToNext = function(current, event) {
     if (current.value.length >= current.maxLength) {
-        let next = current.nextElementSibling;
+        const next = current.nextElementSibling;
         if (next) next.focus();
     }
     if (event.key === 'Backspace' && current.value.length === 0) {
-        let prev = current.previousElementSibling;
+        const prev = current.previousElementSibling;
         if (prev) {
             prev.focus();
             prev.value = '';
@@ -90,8 +94,8 @@ window.handlePinCreate = function() {
     for(let i=0; i<createInputs.length; i++) {
         createPin += createInputs[i].value;
     }
-    for(let i=0; i<confirmInputs.length; i++) {
-        confirmPin += confirmInputs[i].value;
+    for(let j=0; j<confirmInputs.length; j++) {
+        confirmPin += confirmInputs[j].value;
     }
     
     if (createPin.length !== 4 || confirmPin.length !== 4) {
@@ -101,9 +105,9 @@ window.handlePinCreate = function() {
     
     if (createPin !== confirmPin) {
         alert('PINs do not match. Please try again.');
-        for (let i = 0; i < createInputs.length; i++) {
-            createInputs[i].value = '';
-            confirmInputs[i].value = '';
+        for (let k = 0; k < createInputs.length; k++) {
+            createInputs[k].value = '';
+            confirmInputs[k].value = '';
         }
         createInputs[0].focus();
         return;
@@ -114,7 +118,14 @@ window.handlePinCreate = function() {
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
     
     const allUsers = JSON.parse(localStorage.getItem('users')) || [];
-    const userIndex = allUsers.findIndex(u => u.email === currentUser.email);
+    let userIndex = -1;
+    for (let u = 0; u < allUsers.length; u++) {
+        if (allUsers[u].email === currentUser.email) {
+            userIndex = u;
+            break;
+        }
+    }
+    
     if (userIndex !== -1) {
         allUsers[userIndex].pin = createPin;
         localStorage.setItem('users', JSON.stringify(allUsers));
@@ -175,7 +186,14 @@ window.saveSettings = function() {
     
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
     
-    const userIndex = allUsers.findIndex(u => u.email === currentUser.email);
+    let userIndex = -1;
+    for (let u = 0; u < allUsers.length; u++) {
+        if (allUsers[u].email === currentUser.email) {
+            userIndex = u;
+            break;
+        }
+    }
+    
     if (userIndex !== -1) {
         allUsers[userIndex].firstName = newFirst;
         allUsers[userIndex].lastName = newLast;
@@ -191,8 +209,12 @@ window.saveSettings = function() {
     const dropdownUserName = document.getElementById('dropdownUserName');
     if (greetingNameEl) greetingNameEl.textContent = newFirst;
     if (dropdownUserName) dropdownUserName.textContent = newFirst + " " + newLast;
-    document.getElementById('userName').textContent = newFirst;
-    document.getElementById('profileName').textContent = newFirst + ' ' + newLast;
+    
+    const userNameEl = document.getElementById('userName');
+    if (userNameEl) userNameEl.textContent = newFirst;
+    
+    const profileNameEl = document.getElementById('profileName');
+    if (profileNameEl) profileNameEl.textContent = newFirst + ' ' + newLast;
     
     alert('Settings saved successfully!');
     closeSettingsModal();
@@ -245,7 +267,6 @@ function closeAllDropdowns() {
     if (notifDropdown) notifDropdown.style.display = 'none';
 }
 
-
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar') || document.querySelector('.sidebar');
     const backdrop = document.getElementById('sidebarBackdrop');
@@ -280,8 +301,6 @@ window.onclick = function(event) {
 
 initDashboard();
 
-
-
 function getStoredBalance() {
     return parseFloat(localStorage.getItem('walletBalance') || '0');
 }
@@ -298,215 +317,43 @@ function renderBalance() {
     if (balanceMain) {
         balanceMain.textContent = bal.toLocaleString('en-NG');
     } else if (balanceAmount) {
-        balanceAmount.innerHTML = `₦ ${bal.toLocaleString('en-NG')}<span class="decimals">.00</span>`;
+        balanceAmount.innerHTML = "₦ " + bal.toLocaleString('en-NG') + "<span class=\"decimals\">.00</span>";
     }
 }
 
-
-const PAYSTACK_PUBLIC_KEY = 'pk_test_4f006c972400f69f3ce830536d93cb16cd3ac0ab';
-
-function openPaymentModal(nairaAmount, currency, foreignAmount) {
-    const modal = document.getElementById('paymentModal');
-    const input  = document.getElementById('payAmountInput');
-    const status = document.getElementById('payStatusMsg');
-
-    if (nairaAmount) {
-        input.value = nairaAmount;
-    } else {
-        input.value = '';
-    }
-
-    if (status) {
-        status.style.display = 'none';
-        status.textContent   = '';
-        status.className     = 'pay-status-msg';
-    }
-
-    const btn = document.getElementById('payNowBtn');
-    if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay Securely with Paystack';
-    }
-
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-}
-
-function closePaymentModal() {
-    const modal = document.getElementById('paymentModal');
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-}
-
-document.addEventListener('click', (e) => {
-    const modal = document.getElementById('paymentModal');
-    if (modal && e.target === modal) {
-        closePaymentModal();
-    }
-});
-
-function setModalAmount(amount, event) {
-    const input = document.getElementById('payAmountInput');
-    if (input) input.value = amount;
-
-    document.querySelectorAll('.pay-quick-pill').forEach(btn => btn.classList.remove('active'));
-    // Use the passed event if available, otherwise try global event
-    var clickedBtn = (event && event.target) ? event.target : null;
-    if (clickedBtn) clickedBtn.classList.add('active');
-}
-
-
-function initiatePaystackPayment() {
-    const input  = document.getElementById('payAmountInput');
-    const status = document.getElementById('payStatusMsg');
-    const btn    = document.getElementById('payNowBtn');
-
-    const amount = parseFloat(input.value);
-
-    if (!amount || amount < 100) {
-        showPayStatus('⚠️ Please enter an amount of at least ₦100.', 'warn');
-        return;
-    }
-
-    // Always use the currently logged-in user's email for Paystack
-    const currentUserData = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    const email = (currentUserData && currentUserData.email)
-        ? currentUserData.email
-        : 'customer@cowrywise.demo';
-
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Opening payment...';
-
-    if (typeof PaystackPop === 'undefined') {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay Securely with Paystack';
-        showPayStatus('⚠️ Paystack failed to load. Check your internet connection and refresh the page.', 'error');
-        return;
-    }
-
-    // ─── MOBILE FIX ────────────────────────────────────────────────────────
-    // iOS Safari and Android Chrome clip or hide position:fixed iframes when
-    // the parent page has overflow:hidden or a fixed modal covering the screen.
-    // Solution: hide our modal BEFORE opening Paystack, restore on cancel.
-    const payModal = document.getElementById('paymentModal');
-    if (payModal) payModal.style.visibility = 'hidden';
-    document.body.style.overflow = ''; // unlock body scroll for Paystack iframe
-    // ───────────────────────────────────────────────────────────────────────
-
-    // Shared config for both API versions
-    const paystackConfig = {
-        key:      PAYSTACK_PUBLIC_KEY,
-        email:    email,
-        amount:   Math.round(amount * 100), // kobo
-        currency: 'NGN',
-        ref:      'CW_' + Date.now() + '_' + Math.floor(Math.random() * 1e6),
-
-        // Callbacks for newer API (newTransaction)
-        onSuccess: function(transaction) {
-            const newBalance = getStoredBalance() + amount;
-            saveBalance(newBalance);
-            renderBalance();
-            addNotification(`₦${amount.toLocaleString('en-NG')} successfully added to your Naira wallet.`, 'payment');
-            // Restore and update modal to show success, then close
-            if (payModal) payModal.style.visibility = 'visible';
-            document.body.style.overflow = 'hidden';
-            showPayStatus(`✅ Payment successful! ₦${amount.toLocaleString('en-NG')} added to your wallet.`, 'success');
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> Payment Confirmed!';
-            setTimeout(() => closePaymentModal(), 2500);
-        },
-        onCancel: function() {
-            // Restore our modal so the user can try again
-            if (payModal) payModal.style.visibility = 'visible';
-            document.body.style.overflow = 'hidden';
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay Securely with Paystack';
-            showPayStatus('Payment window closed. Try again when ready.', 'warn');
-        },
-
-        // Callbacks for older API (setup/openIframe)
-        callback: function(response) {
-            const newBalance = getStoredBalance() + amount;
-            saveBalance(newBalance);
-            renderBalance();
-            addNotification(`₦${amount.toLocaleString('en-NG')} successfully added to your Naira wallet.`, 'payment');
-            if (payModal) payModal.style.visibility = 'visible';
-            document.body.style.overflow = 'hidden';
-            showPayStatus(`✅ Payment successful! ₦${amount.toLocaleString('en-NG')} added to your wallet.`, 'success');
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> Payment Confirmed!';
-            setTimeout(() => closePaymentModal(), 2500);
-        },
-        onClose: function() {
-            if (payModal) payModal.style.visibility = 'visible';
-            document.body.style.overflow = 'hidden';
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay Securely with Paystack';
-            showPayStatus('Payment window closed. Try again when ready.', 'warn');
-        }
-    };
-
-    // Use the newer newTransaction API if available (better mobile support),
-    // otherwise fall back to the older setup/openIframe approach
-    try {
-        if (typeof PaystackPop.newTransaction === 'function') {
-            PaystackPop.newTransaction(paystackConfig);
+function navigateToPayment(amount) {
+    document.body.style.cursor = 'wait';
+    setTimeout(function() {
+        document.body.style.cursor = 'default';
+        if (amount) {
+            window.location.href = 'payment.html?amount=' + amount;
         } else {
-            const handler = PaystackPop.setup(paystackConfig);
-            handler.openIframe();
+            window.location.href = 'payment.html';
         }
-    } catch (err) {
-        // Restore modal if Paystack fails to open
-        if (payModal) payModal.style.visibility = 'visible';
-        document.body.style.overflow = 'hidden';
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay Securely with Paystack';
-        showPayStatus('⚠️ Could not open payment window. Please try again.', 'error');
-    }
+    }, 500);
 }
 
-
-
-function showPayStatus(message, type) {
-    const status = document.getElementById('payStatusMsg');
-    if (!status) return;
-    status.textContent   = message;
-    status.style.display = 'block';
-    status.className     = `pay-status-msg pay-status-${type}`;
-}
-
-function resetPayBtn() {
-    const btn = document.getElementById('payNowBtn');
-    if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay Securely with Paystack';
-    }
-}
-
-
-const navigateToSave = (e) => {
+function navigateToSave(e) {
     if (e) e.preventDefault();
     document.body.style.cursor = 'wait';
-    setTimeout(() => {
+    setTimeout(function() {
         document.body.style.cursor = 'default';
         window.location.href = 'save.html';
     }, 1500);
-};
+}
 window.navigateToSave = navigateToSave;
 
-const navigateToInvest = (e) => {
+function navigateToInvest(e) {
     if (e) e.preventDefault();
     document.body.style.cursor = 'wait';
-    setTimeout(() => {
+    setTimeout(function() {
         document.body.style.cursor = 'default';
         window.location.href = 'invest.html';
     }, 1500);
-};
+}
 window.navigateToInvest = navigateToInvest;
 
-window.openPaymentModal  = openPaymentModal;
-window.closePaymentModal = closePaymentModal;
-window.setModalAmount    = setModalAmount;
-window.initiatePaystackPayment = initiatePaystackPayment;
-
+window.navigateToPayment = navigateToPayment;
 
 function switchTab(tabName) {
     const tabHome = document.getElementById('tabHome');
@@ -539,7 +386,7 @@ function updatePortfolioView() {
             growthAmountEl.textContent = '₦ 0K';
         } else {
             const kAmount = (bal / 1000).toFixed(1).replace(/\.0$/, '');
-            growthAmountEl.textContent = `₦ ${kAmount}K`;
+            growthAmountEl.textContent = "₦ " + kAmount + "K";
         }
     }
 
@@ -564,8 +411,6 @@ window.switchTab = switchTab;
 window.updatePortfolioView = updatePortfolioView;
 window.renderBalance = renderBalance;
 
-
-
 const DEFAULT_NOTIFICATIONS = [
     {
         id: 1,
@@ -584,7 +429,7 @@ const DEFAULT_NOTIFICATIONS = [
 ];
 
 function getNotifications() {
-    let notifs = localStorage.getItem('notifications');
+    const notifs = localStorage.getItem('notifications');
     if (!notifs) {
         localStorage.setItem('notifications', JSON.stringify(DEFAULT_NOTIFICATIONS));
         return DEFAULT_NOTIFICATIONS;
@@ -602,7 +447,12 @@ function renderNotifications() {
     if (!listEl) return;
 
     const notifs = getNotifications();
-    const unreadCount = notifs.filter(n => n.unread).length;
+    let unreadCount = 0;
+    for (let i = 0; i < notifs.length; i++) {
+        if (notifs[i].unread) {
+            unreadCount++;
+        }
+    }
 
     if (badgeEl) {
         if (unreadCount > 0) {
@@ -615,43 +465,50 @@ function renderNotifications() {
     listEl.innerHTML = '';
 
     if (notifs.length === 0) {
-        listEl.innerHTML = `
-            <div style="padding: 30px; text-align: center; color: #94a3b8; font-size: 13.5px;">
-                <i class="fa-regular fa-bell-slash" style="font-size: 24px; margin-bottom: 8px; display: block; opacity: 0.6;"></i>
-                No notifications yet
-            </div>
-        `;
+        listEl.innerHTML = "" +
+            "<div style=\"padding: 30px; text-align: center; color: #94a3b8; font-size: 13.5px;\">" +
+                "<i class=\"fa-regular fa-bell-slash\" style=\"font-size: 24px; margin-bottom: 8px; display: block; opacity: 0.6;\"></i>" +
+                "No notifications yet" +
+            "</div>";
         return;
     }
 
-    notifs.forEach(notif => {
+    for (let j = 0; j < notifs.length; j++) {
+        const notif = notifs[j];
         const item = document.createElement('div');
-        item.className = `notif-item ${notif.unread ? 'unread' : ''}`;
+        
+        let className = "notif-item";
+        if (notif.unread) {
+            className += " unread";
+        }
+        item.className = className;
         
         let iconHtml = '<i class="fa-regular fa-bell"></i>';
         if (notif.type === 'welcome') iconHtml = '<i class="fa-solid fa-leaf"></i>';
         if (notif.type === 'payment') iconHtml = '<i class="fa-solid fa-wallet"></i>';
         if (notif.type === 'investment') iconHtml = '<i class="fa-solid fa-chart-line"></i>';
 
-        item.innerHTML = `
-            <div class="notif-icon-wrapper">
-                ${iconHtml}
-            </div>
-            <div class="notif-details">
-                <span class="notif-text">${notif.text}</span>
-                <span class="notif-time">${notif.time}</span>
-            </div>
-        `;
+        item.innerHTML = "" +
+            "<div class=\"notif-icon-wrapper\">" +
+                iconHtml +
+            "</div>" +
+            "<div class=\"notif-details\">" +
+                "<span class=\"notif-text\">" + notif.text + "</span>" +
+                "<span class=\"notif-time\">" + notif.time + "</span>" +
+            "</div>";
 
+        item.setAttribute('data-id', notif.id);
         item.onclick = function() {
-            markNotificationAsRead(notif.id);
+            const clickedId = parseInt(this.getAttribute('data-id'), 10);
+            markNotificationAsRead(clickedId);
         };
 
         listEl.appendChild(item);
-    });
+    }
 }
 
-function addNotification(text, type = "payment") {
+function addNotification(text, type) {
+    if (!type) type = "payment";
     const notifs = getNotifications();
     const newNotif = {
         id: Date.now(),
@@ -667,7 +524,15 @@ function addNotification(text, type = "payment") {
 
 function markNotificationAsRead(id) {
     const notifs = getNotifications();
-    const notif = notifs.find(n => n.id === id);
+    let notif = null;
+    
+    for (let i = 0; i < notifs.length; i++) {
+        if (notifs[i].id === id) {
+            notif = notifs[i];
+            break;
+        }
+    }
+    
     if (notif) {
         notif.unread = false;
         saveNotifications(notifs);
@@ -681,11 +546,12 @@ function markAllNotificationsRead(event) {
         event.stopPropagation();
     }
     const notifs = getNotifications();
-    notifs.forEach(n => n.unread = false);
+    for (let i = 0; i < notifs.length; i++) {
+        notifs[i].unread = false;
+    }
     saveNotifications(notifs);
     renderNotifications();
 }
-
 
 function handleSignOut(event) {
     if (event) {
@@ -702,30 +568,28 @@ window.addNotification = addNotification;
 window.markAllNotificationsRead = markAllNotificationsRead;
 window.handleSignOut = handleSignOut;
 
-var currentSlide = 0;
+let currentSlide = 0;
 
 function goToSlide(index) {
-    var slides = document.querySelectorAll('.promo-slide');
-    var dots = document.querySelectorAll('.promo-dot');
-    for (var i = 0; i < slides.length; i++) {
+    const slides = document.querySelectorAll('.promo-slide');
+    const dots = document.querySelectorAll('.promo-dot');
+    for (let i = 0; i < slides.length; i++) {
         slides[i].classList.remove('active');
         dots[i].classList.remove('active');
     }
     currentSlide = index;
-    slides[currentSlide].classList.add('active');
-    dots[currentSlide].classList.add('active');
+    if (slides[currentSlide]) slides[currentSlide].classList.add('active');
+    if (dots[currentSlide]) dots[currentSlide].classList.add('active');
 }
 
 function startSlider() {
-    var slides = document.querySelectorAll('.promo-slide');
+    const slides = document.querySelectorAll('.promo-slide');
     if (slides.length === 0) return;
     setInterval(function() {
-        var next = (currentSlide + 1) % slides.length;
+        const next = (currentSlide + 1) % slides.length;
         goToSlide(next);
     }, 4000);
 }
 
 window.goToSlide = goToSlide;
 startSlider();
-
-
