@@ -757,8 +757,8 @@ body.dark .sidebar-backdrop {
     display: none;
     background: none;
     border: none;
-    font-size: 20px;
-    color: var(--dark-blue);
+    font-size: 22px;
+    color: #ffffff;
     cursor: pointer;
     padding: 6px 8px;
     border-radius: 8px;
