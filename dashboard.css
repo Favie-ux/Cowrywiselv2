@@ -254,9 +254,35 @@ body.dark .invest-header .balance-title {
     color: #94a3b8;
 }
 
+body.dark .save-header .balance-amount,
+body.dark .invest-header .balance-amount {
+    color: #f8fafc; /* Very light, almost white for the main amount */
+}
+
+body.dark .save-header .decimals,
+body.dark .invest-header .decimals {
+    color: #94a3b8; /* Slate gray for decimals */
+}
+
 body.dark .plan-card {
     background-color: #1e293b;
     border-color: #334155 !important;
+}
+
+body.dark .add-icon {
+    background-color: rgba(59, 130, 246, 0.15); /* Soft transparent blue */
+    color: #60a5fa;
+}
+
+body.dark .next-arrow {
+    background-color: #334155;
+    color: #94a3b8;
+    box-shadow: none;
+}
+
+body.dark .empty-badge {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
 }
 
 body.dark .plan-card h4,
@@ -276,6 +302,10 @@ body.dark .more-invest-card {
 
 body.dark .more-invest-card h4 {
     color: #e2e8f0;
+}
+
+body.dark .card-text-area p {
+    color: #94a3b8;
 }
 
 /* Mobile bottom nav dark mode */
@@ -675,6 +705,7 @@ body.dark .sidebar-backdrop {
     display: block;
     border-radius: 20px;
     object-fit: cover;
+    background-color: var(--white);
 }
 
 .promo-dots {

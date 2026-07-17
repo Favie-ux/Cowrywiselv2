@@ -91,63 +91,93 @@
 
 .more-invest-card {
     border-radius: 20px;
-    padding: 20px;
-    height: 180px;
+    padding: 24px;
+    height: 160px; /* Slightly taller for the extra text */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     position: relative;
-    overflow: hidden;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.more-invest-card:hover {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
 }
 
 .more-invest-card:active {
     transform: scale(0.98);
 }
 
-.more-invest-card h4 {
-    font-size: 18px;
+.card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.card-arrow {
+    color: var(--text-gray);
+    opacity: 0.5;
+    font-size: 14px;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.more-invest-card:hover .card-arrow {
+    opacity: 1;
+    transform: translateX(3px);
+}
+
+.card-text-area h4 {
+    font-size: 17px;
     font-weight: 600;
     color: var(--dark-blue);
-    position: relative;
+    margin-bottom: 4px;
     z-index: 2;
 }
 
+.card-text-area p {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0;
+    font-weight: 500;
+}
+
 .card-illustration {
-    position: absolute;
-    bottom: -20px;
-    right: -20px;
-    font-size: 120px;
-    opacity: 0.2;
-    z-index: 1;
+    order: 1;
+    position: static;
+    font-size: 28px;
+    opacity: 1;
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.6);
 }
 
 /* Background Colors based on screenshot */
 .ng-stocks {
-    background-color: #bbf7d0; /* light green */
+    background-color: #dcfce7; 
 }
 .ng-stocks .card-illustration {
     color: #16a34a;
-    font-size: 100px;
-    bottom: -10px;
-    right: 0;
 }
 
 .naira-mutual {
-    background-color: #ffedd5; /* peach */
+    background-color: #ffedd5;
 }
 .naira-mutual .card-illustration {
     color: #ea580c;
-    bottom: -15px;
-    right: -10px;
 }
 
 .dollar-mutual {
-    background-color: #e0e7ff; /* light blue/purple */
-    grid-column: span 2; /* Make it full width */
+    background-color: #e0e7ff; 
+    grid-column: span 2; 
 }
 .dollar-mutual .card-illustration {
     color: #4f46e5;
-    bottom: -30px;
-    right: 10px;
 }
 
 /* Learn More Link */

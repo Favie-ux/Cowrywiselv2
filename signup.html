@@ -23,6 +23,22 @@
         <div class="form">
             <h1>Complete your profile</h1><br>
             
+            <div class="signin" style="display:flex; gap: 10px; margin-bottom: 20px;">
+                <div class="google" style="flex: 1;">
+                 <button class="google-btn" type="button" onclick="googleAuth()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px; border: 1px solid #dbe2f2; border-radius: 8px; background: white; cursor: pointer; font-weight: 600; color: #0a2e65;">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" style="width: 20px; height: 20px;">
+                  Sign up with Google
+                 </button>
+                </div>
+                <div class="apple" style="flex: 1;">
+                    <button class="google-btn" type="button" onclick="appleAuth()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px; border: 1px solid #dbe2f2; border-radius: 8px; background: white; cursor: pointer; font-weight: 600; color: #0a2e65;">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" class="apple-logo" style="width: 20px; height: 20px;">
+                     Sign up with Apple
+                </button>
+                 </div>
+            </div>
+            <div class="separator" style="text-align: center; margin-bottom: 20px; color: #6c82a3; font-weight: 500;">or</div>
+
             <div class="signup-fields" style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
                 <input class="email" type="text" placeholder="Legal First Name" id="firstName" required>
                 <input class="email" type="text" placeholder="Legal Last Name" id="lastName" required>

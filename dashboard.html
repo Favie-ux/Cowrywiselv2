@@ -301,53 +301,6 @@
     </div>
 
 
-    <!-- Settings Modal -->
-    <div id="settingsModalOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 100000;">
-        <div style="background-color: white; width: 500px; max-width: 90%; border-radius: 12px; padding: 30px; position: relative; max-height: 90vh; overflow-y: auto;">
-            <i class="fa-solid fa-xmark" style="position: absolute; top: 20px; right: 20px; cursor: pointer; color: #8e9bbd; font-size: 20px;" onclick="closeSettingsModal()"></i>
-            <h3 style="color: #0a2e65; font-size: 22px; margin-bottom: 20px;">Settings & Profile</h3>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
-                <div>
-                    <label style="display: block; font-size: 13px; color: #6c82a3; margin-bottom: 5px;">First Name</label>
-                    <input type="text" id="setFirstName" style="width: 100%; padding: 10px; border: 1px solid #dbe2f2; border-radius: 5px;">
-                </div>
-                <div>
-                    <label style="display: block; font-size: 13px; color: #6c82a3; margin-bottom: 5px;">Last Name</label>
-                    <input type="text" id="setLastName" style="width: 100%; padding: 10px; border: 1px solid #dbe2f2; border-radius: 5px;">
-                </div>
-                <div style="grid-column: span 2;">
-                    <label style="display: block; font-size: 13px; color: #6c82a3; margin-bottom: 5px;">Email (Cannot be changed)</label>
-                    <input type="email" id="setEmail" readonly style="width: 100%; padding: 10px; border: 1px solid #dbe2f2; border-radius: 5px; background-color: #f8f9fa;">
-                </div>
-                <div>
-                    <label style="display: block; font-size: 13px; color: #6c82a3; margin-bottom: 5px;">Sex</label>
-                    <select id="setSex" style="width: 100%; padding: 10px; border: 1px solid #dbe2f2; border-radius: 5px;">
-                        <option value="female">Female</option>
-                        <option value="male">Male</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div>
-                    <label style="display: block; font-size: 13px; color: #6c82a3; margin-bottom: 5px;">Location</label>
-                    <input type="text" id="setLocation" style="width: 100%; padding: 10px; border: 1px solid #dbe2f2; border-radius: 5px;">
-                </div>
-            </div>
-            
-            <hr style="border: 0; border-top: 1px solid #eef3fa; margin: 20px 0;">
-            
-            <h4 style="color: #0a2e65; font-size: 16px; margin-bottom: 15px;">Security</h4>
-            <div style="display: flex; gap: 15px; margin-bottom: 25px;">
-                <div style="flex: 1;">
-                    <label style="display: block; font-size: 13px; color: #6c82a3; margin-bottom: 5px;">New Dashboard PIN</label>
-                    <input type="password" id="setNewPin" maxlength="4" placeholder="4 digits" style="width: 100%; padding: 10px; border: 1px solid #dbe2f2; border-radius: 5px; text-align: center; letter-spacing: 5px; font-size: 16px;">
-                </div>
-            </div>
-            
-            <button onclick="saveSettings()" style="width: 100%; padding: 12px; background-color: #0054ff; color: white; border: none; border-radius: 5px; font-weight: 600; cursor: pointer;">Save Changes</button>
-        </div>
-    </div>
-
 
     <script src="dashboard.js"></script>
 </body>

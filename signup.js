@@ -170,11 +170,27 @@ function googleAuth() {
       const user = result.user;
       
       const nameParts = user.displayName ? user.displayName.split(' ') : ['Google', 'User'];
-      localStorage.setItem('currentUser', JSON.stringify({
-          email: user.email,
-          firstName: nameParts[0],
-          lastName: nameParts.slice(1).join(' ') || 'User'
-      }));
+      const emailVal = user.email;
+      const firstVal = nameParts[0];
+      const lastVal = nameParts.slice(1).join(' ') || 'User';
+      
+      let existingUser = allUsers.find(u => u.email === emailVal);
+      
+      if (!existingUser) {
+          existingUser = {
+              email: emailVal,
+              firstName: firstVal,
+              lastName: lastVal,
+              sex: '',
+              location: '',
+              password: '',
+              isHalal: false
+          };
+          allUsers.push(existingUser);
+          localStorage.setItem("users", JSON.stringify(allUsers));
+      }
+      
+      localStorage.setItem('currentUser', JSON.stringify(existingUser));
 
       toast('Signed in with Google successfully!', '#000', '#0f0');
       const loader = document.getElementById('globalLoadingScreen');
