@@ -111,7 +111,7 @@ function toast(info, color, background) {
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBSeaPQfDOL8vE6fkhh3GSFTXahgJzzl-o",
@@ -128,9 +128,9 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-function googleAuth() {
-  signInWithPopup(auth, provider)
-    .then((result) => {
+getRedirectResult(auth)
+  .then((result) => {
+    if (result) {
       const user = result.user;
       const emailVal = user.email;
       
@@ -156,11 +156,54 @@ function googleAuth() {
       setTimeout(() => {
         window.location.href = 'dashboard.html';
       }, 1500);
+    }
+  }).catch((error) => {
+    const errorMessage = error.message;
+    toast(`Error: ${errorMessage}`, '#fff', '#f00');
+  });
 
-    }).catch((error) => {
-      const errorMessage = error.message;
-      toast(`Error: ${errorMessage}`, '#fff', '#f00');
-    });
+function googleAuth() {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) {
+      signInWithRedirect(auth, provider);
+  } else {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          const emailVal = user.email;
+          
+          let existingUser = allUsers.find(u => u.email === emailVal);
+          
+          if (!existingUser) {
+              toast('Account not found! Redirecting to sign up...', '#fff', '#f00');
+              const loader = document.getElementById('globalLoadingScreen');
+              if (loader) loader.style.display = 'flex';
+              
+              setTimeout(() => {
+                window.location.href = 'signup.html';
+              }, 1500);
+              return;
+          }
+          
+          localStorage.setItem('currentUser', JSON.stringify(existingUser));
+
+          toast('Signed in with Google successfully!', '#000', '#0f0');
+          const loader = document.getElementById('globalLoadingScreen');
+          if (loader) loader.style.display = 'flex';
+          
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1500);
+
+        }).catch((error) => {
+          if (error.code === 'auth/popup-blocked') {
+              signInWithRedirect(auth, provider);
+          } else {
+              const errorMessage = error.message;
+              toast(`Error: ${errorMessage}`, '#fff', '#f00');
+          }
+        });
+  }
 }
 
 function appleAuth() {
